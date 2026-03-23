@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bug Tracker</title>
+    <head>
+    <title>Bug Tracker</title>
+
+    <style>
+body {
+    font-family: Arial;
+    background: #f0f2f5;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+input {
+    padding: 10px;
+    width: 70%;
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+}
+
+li {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+
+</head>
+</head>
+<body>
+
+<div class="container">
+
+<h1>Bug Tracker 🐞</h1>
+
+<input type="text" id="bugInput" placeholder="Enter bug">
+<button onclick="addBug()">Add Bug</button>
+
+<ul id="bugList"></ul>
+
+</div>
+
+</body>
+
+<script>
+let bugs = [];
+
+// Load saved bugs when page loads
+window.onload = function() {
+    let savedBugs = localStorage.getItem("bugs");
+    if (savedBugs) {
+        bugs = JSON.parse(savedBugs);
+        bugs.forEach(bug => displayBug(bug));
+    }
+};
+
+function addBug() {
+    let bugText = document.getElementById("bugInput").value;
+
+    if (bugText === "") return;
+
+    bugs.push(bugText);
+    localStorage.setItem("bugs", JSON.stringify(bugs));
+
+    displayBug(bugText);
+
+    document.getElementById("bugInput").value = "";
+}
+
+function displayBug(bugText) {
+    let li = document.createElement("li");
+
+    let span = document.createElement("span");
+    span.textContent = bugText;
+
+    span.onclick = function() {
+        span.style.textDecoration = "line-through";
+    };
+
+    let deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+
+    deleteBtn.onclick = function() {
+        li.remove();
+
+        bugs = bugs.filter(b => b !== bugText);
+        localStorage.setItem("bugs", JSON.stringify(bugs));
+    };
+
+    li.appendChild(span);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(deleteBtn);
+
+    document.getElementById("bugList").appendChild(li);
+}
+</script>
+
+</body>
+</html>
