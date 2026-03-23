@@ -66,7 +66,6 @@ li {
 <script>
 let bugs = [];
 
-// Load saved bugs when page loads
 window.onload = function() {
     let savedBugs = localStorage.getItem("bugs");
     if (savedBugs) {
@@ -98,6 +97,19 @@ function displayBug(bugText) {
         span.style.textDecoration = "line-through";
     };
 
+    let editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+
+    editBtn.onclick = function() {
+        let newText = prompt("Edit bug:", span.textContent);
+        if (newText) {
+            span.textContent = newText;
+
+            bugs = bugs.map(b => b === bugText ? newText : b);
+            localStorage.setItem("bugs", JSON.stringify(bugs));
+        }
+    };
+
     let deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
 
@@ -110,6 +122,7 @@ function displayBug(bugText) {
 
     li.appendChild(span);
     li.appendChild(document.createTextNode(" "));
+    li.appendChild(editBtn);
     li.appendChild(deleteBtn);
 
     document.getElementById("bugList").appendChild(li);
